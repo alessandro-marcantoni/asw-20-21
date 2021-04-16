@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Hello World in Vue.js</title>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+<style>
+</style>
+</head>
+
+<!--https://icon-library.net//images/not-found-icon/not-found-icon-4.jpg-->
+
+<body>
+<div id="movies-app" class="container-fluid">
+	<h1>Amazing Movies</h1>
+	<div class="row">
+		<div class="col">
+			<div v-for="movie in movies" class="card" v-bind:key="movie._id">
+				<div class="row no-gutters">
+					<div class="col-md-4">
+						<img v-if="movie.poster" v-bind:src="movie.poster" class="card-img" alt="" @error="replaceByDefault">
+						<img v-else src="https://icon-library.net//images/not-found-icon/not-found-icon-4.jpg" class="card-img" alt="">
+					</div>
+					<div class="col-md-8">
+						<div class="card-body">
+							<h5 class="card-title">Title: {{ movie.title}}</h5>
+							<p v-if="movie.imdb.rating" class="card-text">Rating: {{ movie.imdb.rating}}</p>
+							<p v-else class="card-text">Rating: Not rated</p>
+							<p class="card-text">Plot: {{ movie.plot}}</p>
+							<p class="card-text">Release date: {{ movie.released | limit(10)}}</p>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+	var app = new Vue({
+		el: "#movies-app",
+		data: function (){
+			return {
+				movies: []
+			}
+		},
+		methods: {
+			// definire funzione listMovies
+			listMovies: function(){
+				axios.get("http://localhost:3000/api/movies")
+				.then( response => {
+					this.movies = response.data;
+					console.log(this.movies);
+					this.movies.forEach(movie => {
+						if(movie.poster!=null){
+							movie.poster = movie.poster.replace(
+									"http://ia.media-imdb.com",
+									"https://m.media-amazon.com");
+						}
+					})
+				})
+			},
+			replaceByDefault(e){
+				e.target.src = "https://icon-library.net//images/not-found-icon/not-found-icon-4.jpg"
+			}
+		},
+		mounted: function(){
+			// chiamare funzione listMovies
+			this.listMovies();
+		},
+		filters: {
+			limit(text,length){
+				if(text==null) return ""
+				return text.substring(0,length)
+			}
+		}
+	})
+</script>
+
+</body>
+</html>
