@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <div id="app"> {{ message }} </div>
+    <div id="app2">
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script>
+        const app = new Vue({
+            el: "#app",
+            data: function (){
+                return {
+                    message: "Hello!"
+                }
+            }
+        })
+        const app2 = new Vue({
+            template: `<h1> {{ message }} </h1>`,
+            data: function (){
+                return {
+                    message: "Hello!"
+                }
+            }
+        })
+        app2.$mount('#app2')
+    </script>
+</body>
+</html>

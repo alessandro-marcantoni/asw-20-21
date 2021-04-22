@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div id="app">
+    <my-cmp></my-cmp>
+    <my-cmp></my-cmp>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+<script>
+    Vue.component('my-cmp', {
+        template: `<p>Server status: {{ status }}</p>`,
+        data: function (){
+            return {
+                status: "online"
+            }
+        }
+    })
+
+    const app = new Vue({
+        el: "#app"
+    })
+</script>
+</body>
+</html>
